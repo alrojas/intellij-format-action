@@ -2,24 +2,23 @@
 
 # Wrapper for the formatter that passes action args and processes the output.
 # Required args:
-# - Path to base directory.
 # - File include glob pattern.
 # - Whether to fail on file changes.
+# - Files to be formatted
 
-if [[ $# -ne 4 ]]; then
-  echo 'Exactly three parameters (base dir path, input file pattern, fail on changes, changed files) required.'
+if [[ $# -ne 3 ]]; then
+  echo 'Exactly three parameters (input file pattern, fail on changes, files) required.'
   exit 1
 fi
 
-base_path=$1
-include_pattern=$2
-fail_on_changes=$3
-changed_files=$4
+include_pattern=$1
+fail_on_changes=$2
+files=$3
 
-cd "/github/workspace/$base_path" || exit 2
+cd "/github/workspace/" || exit 2
 formatted_files_before=$(git status --short)
 
-/opt/idea/bin/format.sh -m $include_pattern -r $changed_files
+/opt/idea/bin/format.sh -m $include_pattern -r $files
 
 formatted_files_after=$(git status --short)
 formatted_files=$(diff <(echo "$formatted_files_before") <(echo "$formatted_files_after"))

@@ -9,16 +9,11 @@ inputs:
       Pattern for files to include. Supports glob-style wildcards. Multiple patterns can be separated by commas.
     required: false
     default: '*'
-  path:
+  files:
     description: |
-      Path to project directory. The formatter is executed recursively from here. Must be relative to the workspace.
-    required: false
-    default: '.'
-  changed-files:
-    description: |
-      List of changed files in PR. Must be relative to the workspace.
+      List of files in PR. Must be relative to the workspace.
     required: true
-    default: ''
+    default: '.'
   fail-on-changes:
     description: If true, the action fails if any file changed.
     required: false
@@ -30,7 +25,6 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.path }}
     - ${{ inputs.include-glob }}
     - ${{ inputs.fail-on-changes }}
-    - ${{ inputs.changed-files }}
+    - ${{ inputs.files }}
